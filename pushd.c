@@ -32,6 +32,7 @@ void push(char *);
 int
 main(int argc, char *argv[])
 {
+	char chunk[1024];
 	char *line;
 	size_t len;
 #ifdef PUSHD_IGNORE
@@ -57,7 +58,8 @@ main(int argc, char *argv[])
 			}
 		}
 #endif
-		push(line);
+		strlcpy(chunk, line, sizeof(chunk));
+		push(chunk);
 		free(line);
 	}
 
