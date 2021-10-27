@@ -72,6 +72,7 @@ push(char *msg)
 {
 	CURL *curl;
 	char *opts = NULL;
+	char *output;
 
 	if (msg == NULL || strlen(msg) == 0)
 		return;
@@ -80,8 +81,14 @@ push(char *msg)
 	if (curl == NULL)
 		return;
 
+	output = curl_easy_escape(curl, msg, 0);
+	if (output == NULL)
+		goto out;
+
 	asprintf(&opts, "token=" PUSHD_TOKEN "&user=" PUSHD_USER
-	    "&message=%s", msg);
+	    "&message=%s", output);
+	curl_free(output);
+
 	if (opts == NULL)
 		goto out;
 
