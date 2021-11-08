@@ -27,7 +27,7 @@
 /* #define PUSHD_USER "YOUR USERTOKEN" */
 /* #define PUSHD_PROXY "http://your.proxy.example.org:8181" */
 /* #define PUSHD_IGNORE "/bsd: ignore this" */
-/* #define TITLE "resuse your app token on multiple machines" */
+/* #define TITLE "reuse your app token on multiple machines" */
 
 char title[250];
 
