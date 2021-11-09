@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <err.h>
+#include <unistd.h>
 
 #include "curl/curl.h"
 
@@ -26,6 +27,9 @@
 /* #define PUSHD_USER "YOUR USERTOKEN" */
 /* #define PUSHD_PROXY "http://your.proxy.example.org:8181" */
 /* #define PUSHD_IGNORE "/bsd: ignore this" */
+/* #define PUSHD_TITLE "optional title (default: hostname)" */
+
+char title[250+1];
 
 void push(char *);
 
@@ -37,6 +41,13 @@ main(int argc, char *argv[])
 	size_t len;
 #ifdef PUSHD_IGNORE
 	size_t i;
+#endif
+
+	if (gethostname(title, sizeof(title)))
+		err(1, "gethostname");
+
+#ifdef PUSHD_TITLE
+	strlcpy(title, PUSHD_TITLE, sizeof(title));
 #endif
 
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -86,7 +97,7 @@ push(char *msg)
 		goto out;
 
 	asprintf(&opts, "token=" PUSHD_TOKEN "&user=" PUSHD_USER
-	    "&message=%s", output);
+	    "&title=%s&message=%s", title, output);
 	curl_free(output);
 
 	if (opts == NULL)
